@@ -70,15 +70,16 @@ Add a `.md` file to your `/posts` directory. Push to main. Blurt renders it, gen
 
 ## Blurt vs. Alternatives
 
-| | Blurt | Ghost | Hugo/Jekyll | Substack | Hashnode |
-|---|---|---|---|---|---|
-| Git push to publish | **Yes** | No | Yes (with setup) | No | No |
-| Email to publish | **Yes** | No | No | No | No |
-| Zero config | **Yes** | No | No | Yes | Yes |
-| Open source | **Yes** | Yes | Yes | No | No |
-| Free self-hosting | **Yes** | Yes | Yes | No | No |
-| Syntax highlighting | **Yes** | Plugin | Yes | No | Yes |
-| No vendor lock-in | **Yes** | Partial | Yes | No | No |
+| | Blurt | Ghost | Hugo/Jekyll | Substack | Hashnode | Dev.to | Medium |
+|---|---|---|---|---|---|---|---|
+| Git push to publish | **Yes** | No | Yes (with setup) | No | No | No | No |
+| Email to publish | **Yes** | No | No | No | No | No | No |
+| Zero config | **Yes** | No | No | Yes | Yes | Yes | Yes |
+| Open source | **Yes** | Yes | Yes | No | No | No | No |
+| Free self-hosting | **Yes** | Yes | Yes | No | No | No | No |
+| Custom domain | **Yes** | Yes | Yes | No | Yes | No | Yes (paid) |
+| Syntax highlighting | **Yes** | Plugin | Yes | No | Yes | Yes | No |
+| No vendor lock-in | **Yes** | Partial | Yes | No | No | No | No |
 
 ## Roadmap
 
