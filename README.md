@@ -35,9 +35,11 @@ In 2026, the developer ecosystem has everything Posterous needed but didn't have
 **Two publishing channels. Same result.**
 
 ### Email → Blog Post
+
 Send an email to your Blurt address. The subject becomes the title. The body becomes the content. Attachments become images. Your post is live in under 60 seconds.
 
 ### Git Push → Blog Post
+
 Add a `.md` file to your `/posts` directory. Push to main. Blurt renders it, generates OG images, builds your RSS feed, and deploys to the edge. Done.
 
 ## Features
@@ -55,31 +57,31 @@ Add a `.md` file to your `/posts` directory. Push to main. Blurt renders it, gen
 
 ## Tech Stack
 
-| Layer | Tool | Why |
-|-------|------|-----|
-| Blog engine | Astro | Static output, great DX, markdown-native |
-| Email processing | Cloudflare Email Workers | Reliable inbound email parsing |
-| Hosting | Cloudflare Pages | Free tier, edge deployment, fast |
-| Storage | Cloudflare R2 | S3-compatible, no egress fees |
-| Database | Turso | SQLite at the edge, free tier |
-| Auth | Clerk | Simple auth with GitHub OAuth |
-| Payments | Stripe | Standard, reliable |
-| Analytics | Plausible (self-hosted) | Privacy-friendly, no cookies |
-| OG images | Satori | Auto-generated social cards |
-| CI/CD | GitHub Actions | Free for public repos |
+| Layer            | Tool                     | Why                                      |
+| ---------------- | ------------------------ | ---------------------------------------- |
+| Blog engine      | Astro                    | Static output, great DX, markdown-native |
+| Email processing | Cloudflare Email Workers | Reliable inbound email parsing           |
+| Hosting          | Cloudflare Pages         | Free tier, edge deployment, fast         |
+| Storage          | Cloudflare R2            | S3-compatible, no egress fees            |
+| Database         | Turso                    | SQLite at the edge, free tier            |
+| Auth             | Clerk                    | Simple auth with GitHub OAuth            |
+| Payments         | Stripe                   | Standard, reliable                       |
+| Analytics        | Plausible (self-hosted)  | Privacy-friendly, no cookies             |
+| OG images        | Satori                   | Auto-generated social cards              |
+| CI/CD            | GitHub Actions           | Free for public repos                    |
 
 ## Blurt vs. Alternatives
 
-| | Blurt | Ghost | Hugo/Jekyll | Substack | Hashnode | Dev.to | Medium |
-|---|---|---|---|---|---|---|---|
-| Git push to publish | **Yes** | No | Yes (with setup) | No | No | No | No |
-| Email to publish | **Yes** | No | No | No | No | No | No |
-| Zero config | **Yes** | No | No | Yes | Yes | Yes | Yes |
-| Open source | **Yes** | Yes | Yes | No | No | No | No |
-| Free self-hosting | **Yes** | Yes | Yes | No | No | No | No |
-| Custom domain | **Yes** | Yes | Yes | No | Yes | No | Yes (paid) |
-| Syntax highlighting | **Yes** | Plugin | Yes | No | Yes | Yes | No |
-| No vendor lock-in | **Yes** | Partial | Yes | No | No | No | No |
+|                     | Blurt   | Ghost   | Hugo/Jekyll      | Substack | Hashnode | Dev.to | Medium     |
+| ------------------- | ------- | ------- | ---------------- | -------- | -------- | ------ | ---------- |
+| Git push to publish | **Yes** | No      | Yes (with setup) | No       | No       | No     | No         |
+| Email to publish    | **Yes** | No      | No               | No       | No       | No     | No         |
+| Zero config         | **Yes** | No      | No               | Yes      | Yes      | Yes    | Yes        |
+| Open source         | **Yes** | Yes     | Yes              | No       | No       | No     | No         |
+| Free self-hosting   | **Yes** | Yes     | Yes              | No       | No       | No     | No         |
+| Custom domain       | **Yes** | Yes     | Yes              | No       | Yes      | No     | Yes (paid) |
+| Syntax highlighting | **Yes** | Plugin  | Yes              | No       | Yes      | Yes    | No         |
+| No vendor lock-in   | **Yes** | Partial | Yes              | No       | No       | No     | No         |
 
 ## Roadmap
 
