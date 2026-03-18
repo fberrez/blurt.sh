@@ -1,0 +1,24 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/PostCard.astro";
+
+const posts = (await getCollection("posts"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="Blurt" description="The simplest way to publish on the web.">
+  <section>
+    {
+      posts.map((post) => (
+        <PostCard
+          id={post.id}
+          title={post.data.title}
+          pubDate={post.data.pubDate}
+          description={post.data.description}
+        />
+      ))
+    }
+  </section>
+</BaseLayout>
