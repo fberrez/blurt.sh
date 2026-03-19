@@ -1,0 +1,16 @@
+MIME-Version: 1.0
+From: HTML Sender <f@fberrez.co>
+To: post@blurt.sh
+Subject: Re: An HTML-Only Email
+Date: Tue, 18 Mar 2026 11:00:00 +0000
+Message-ID: <html-001@blurt.sh>
+Content-Type: text/html; charset="UTF-8"
+
+<html>
+<body>
+<p>This email only has an <strong>HTML</strong> body.</p>
+<p>It includes a <a href="https://example.com">link</a> and some <em>emphasis</em>.</p>
+<br>
+<p>Third paragraph after a break.</p>
+</body>
+</html>

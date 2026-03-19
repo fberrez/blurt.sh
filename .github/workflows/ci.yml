@@ -21,3 +21,14 @@ jobs:
       - run: npm run format:check
       - run: npm run lint
       - run: npm run build
+
+  typecheck-email-handler:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: cd workers/email-handler && npm ci && npm run typecheck

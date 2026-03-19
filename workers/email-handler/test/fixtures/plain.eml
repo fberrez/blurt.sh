@@ -1,0 +1,18 @@
+MIME-Version: 1.0
+From: Test User <f@fberrez.co>
+To: post@blurt.sh
+Subject: My First Email Post
+Date: Tue, 18 Mar 2026 10:00:00 +0000
+Message-ID: <plain-001@blurt.sh>
+Content-Type: text/plain; charset="UTF-8"
+
+This is a test post sent via email.
+
+It supports **markdown** formatting since the body is plain text.
+
+## A section
+
+- Item one
+- Item two
+
+That's all for now.
