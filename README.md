@@ -86,8 +86,8 @@ Add a `.md` file to your `/posts` directory. Push to main. Blurt renders it, gen
 ## Roadmap
 
 - [x] Project vision and README
-- [ ] Project skeleton and CI setup
-- [ ] Email-to-post parsing spike
+- [x] Project skeleton and CI setup
+- [x] Email-to-post parsing spike
 - [ ] Core MVP: email channel + git channel
 - [ ] Hosted version with `username.blurt.sh`
 - [ ] Pro tier with custom domains, analytics, and newsletters

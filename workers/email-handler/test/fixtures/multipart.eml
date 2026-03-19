@@ -1,0 +1,33 @@
+MIME-Version: 1.0
+From: Multi Part <f@fberrez.co>
+To: post@blurt.sh
+Subject: Fwd: Post With Attachment
+Date: Tue, 18 Mar 2026 12:00:00 +0000
+Message-ID: <multi-001@blurt.sh>
+Content-Type: multipart/mixed; boundary="boundary123"
+
+--boundary123
+Content-Type: multipart/alternative; boundary="altboundary"
+
+--altboundary
+Content-Type: text/plain; charset="UTF-8"
+
+This is a multipart email with an attachment.
+
+The plain text part should be preferred over HTML.
+
+--altboundary
+Content-Type: text/html; charset="UTF-8"
+
+<html><body><p>This is a multipart email with an attachment.</p><p>The plain text part should be preferred over HTML.</p></body></html>
+
+--altboundary--
+
+--boundary123
+Content-Type: image/png; name="photo.png"
+Content-Disposition: attachment; filename="photo.png"
+Content-Transfer-Encoding: base64
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==
+
+--boundary123--
