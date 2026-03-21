@@ -1,8 +1,0 @@
-name = "blurt-email-handler"
-main = "src/index.ts"
-compatibility_date = "2025-01-01"
-
-[vars]
-REPO_OWNER = "fberrez"
-REPO_NAME = "blurt.sh"
-POST_PATH = "src/content/posts"
