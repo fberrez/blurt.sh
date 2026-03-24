@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/status-coming%20soon-blueviolet?style=flat-square" alt="Coming Soon" />
+  <img src="https://img.shields.io/badge/status-in%20development-orange?style=flat-square" alt="In Development" />
   <a href="https://github.com/fberrez/blurt.sh/stargazers"><img src="https://img.shields.io/github/stars/fberrez/blurt.sh?style=flat-square" alt="Stars" /></a>
   <a href="https://github.com/fberrez/blurt.sh/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License" /></a>
 </p>
@@ -109,24 +109,49 @@ Your post content here.
 | System of record       | **Yes** | No      | No        | No        | No      |
 | Free tier              | **Yes** | Limited | No        | Limited   | Limited |
 
+## Tech Stack
+
+| Layer | Tool |
+| ----- | ---- |
+| Framework | Ruby on Rails 8 |
+| Background jobs | Solid Queue |
+| Database | SQLite |
+| Frontend | Hotwire (Turbo + Stimulus) + Tailwind CSS |
+| Image processing | libvips via image_processing gem |
+| Deployment | Docker + Kamal |
+
 ## Roadmap
 
-- [x] Social queue engine — 6 platforms, filesystem queue, parallel publishing
-- [x] Scheduled posting and image handling
-- [ ] HTTP API
+- [x] Rails 8 foundation — BlurtConfig, Post PORO, MarkdownProcessor, filesystem queue dirs
+- [ ] Queue engine — QueueScanner, PostMover, PublishOrchestrator, Solid Queue jobs
+- [ ] Platform publishers — Bluesky, Mastodon, LinkedIn, Medium, Dev.to, Substack
+- [ ] HTTP API — CRUD posts, history, platforms, health, export
 - [ ] CLI tool: `blurt post`, `blurt queue`, `blurt history`
 - [ ] MCP server for AI editors
 - [ ] Web dashboard
 - [ ] Hosted version at blurt.sh
 - [ ] Analytics and engagement tracking
 
-## Self-Hosting
+## Getting Started
+
+### Development
 
 ```bash
-docker run -v ./queue:/queue -v ./sent:/sent blurt/blurt
+git clone https://github.com/fberrez/blurt.sh.git
+cd blurt.sh
+bundle install
+cp .env.example .env  # configure your platform credentials
+bin/rails db:prepare
+bin/dev
 ```
 
-Configure platform credentials in `.env`. See the [self-hosting guide](docs/self-hosting.md) for details.
+### Self-Hosting (Docker)
+
+```bash
+docker run -v ./queue:/queue -v ./sent:/sent -v ./failed:/failed blurt/blurt
+```
+
+Configure platform credentials in `.env`. See `.env.example` for all available options.
 
 ## Contributing
 
