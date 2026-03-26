@@ -123,7 +123,7 @@ Your post content here.
 ## Roadmap
 
 - [x] Rails 8 foundation — BlurtConfig, Post PORO, MarkdownProcessor, filesystem queue dirs
-- [ ] Queue engine — QueueScanner, PostMover, PublishOrchestrator, Solid Queue jobs
+- [x] Queue engine — QueueScanner, PostMover, ImageProcessor, PublishOrchestrator, Solid Queue recurring jobs, file locking
 - [ ] Platform publishers — Bluesky, Mastodon, LinkedIn, Medium, Dev.to, Substack
 - [ ] HTTP API — CRUD posts, history, platforms, health, export
 - [ ] CLI tool: `blurt post`, `blurt queue`, `blurt history`
