@@ -43,3 +43,9 @@
 # SQLite databases
 /db/*.sqlite3
 /db/*.sqlite3-*
+
+# Queue directories — only keep .gitkeep
+/sent/*
+!/sent/.gitkeep
+/failed/*
+!/failed/.gitkeep
