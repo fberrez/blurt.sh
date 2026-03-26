@@ -32,6 +32,7 @@ class ImageProcessor
         return {
           io: StringIO.new(raw_bytes),
           filename: attachment.filename,
+          alt: attachment.alt,
           mime_type: attachment.mime_type,
           byte_size: raw_bytes.bytesize
         }
@@ -48,6 +49,7 @@ class ImageProcessor
       {
         io: StringIO.new(resized_bytes),
         filename: attachment.filename,
+        alt: attachment.alt,
         mime_type: attachment.mime_type,
         byte_size: resized_bytes.bytesize
       }
