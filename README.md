@@ -231,7 +231,7 @@ queue/     →  QueueScanner finds pending posts
 - [x] Rails 8 foundation — BlurtConfig, Post PORO, MarkdownProcessor, filesystem queue
 - [x] Queue engine — QueueScanner, PostMover, ImageProcessor, PublishOrchestrator, file locking
 - [x] Social publishers — Bluesky (AT Protocol, facets, link previews), Mastodon, LinkedIn (OG thumbnails)
-- [ ] Blog publishers — Medium, Dev.to, Substack
+- [x] Blog publishers — Medium, Dev.to, Substack (+ integration tests with webmock)
 - [ ] HTTP API — CRUD posts, history, platforms, health, export
 - [ ] Docker deployment
 - [ ] CLI tool
