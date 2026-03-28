@@ -55,15 +55,39 @@ class PublishOrchestrator
         end
       end
 
-      platforms.zip(futures.map(&:value)).to_h
+      # 30s timeout per future — safety net above Faraday's 15s timeout
+      platforms.zip(futures.map { |f| f.value(30) }).to_h.transform_values do |result|
+        result || { error: "Publish timed out after 30s" }
+      end
     end
 
     def publish_to_platform(platform, post, images)
       publisher = publisher_for(platform)
       config = BlurtConfig.send(platform)
       publisher.publish(post, config: config, images: images)
+    rescue Faraday::TimeoutError => e
+      Rails.logger.error "[blurt] #{post.filename} -> #{platform}: timed out -- #{e.message}"
+      { error: "#{platform} API timed out -- retry later" }
+    rescue Faraday::ConnectionFailed => e
+      Rails.logger.error "[blurt] #{post.filename} -> #{platform}: connection failed -- #{e.message}"
+      { error: "Could not connect to #{platform} API -- check network" }
+    rescue Faraday::UnauthorizedError => e
+      Rails.logger.error "[blurt] #{post.filename} -> #{platform}: unauthorized (401) -- #{e.message}"
+      { error: "#{platform} authentication failed (401) -- check credentials" }
+    rescue Faraday::ClientError => e
+      status = e.response&.dig(:status)
+      if status == 429
+        retry_after = e.response&.dig(:headers, "retry-after")
+        msg = "#{platform} rate limited (429)"
+        msg += ", retry after #{retry_after}s" if retry_after
+        Rails.logger.warn "[blurt] #{post.filename} -> #{platform}: #{msg}"
+        { error: msg }
+      else
+        Rails.logger.error "[blurt] #{post.filename} -> #{platform}: #{e.class} (#{status}): #{e.message}"
+        { error: "#{platform} API error (#{status}): #{e.message}" }
+      end
     rescue => e
-      Rails.logger.error "[blurt] #{post.filename} → #{platform}: #{e.class}: #{e.message}"
+      Rails.logger.error "[blurt] #{post.filename} -> #{platform}: #{e.class}: #{e.message}"
       { error: "#{e.class}: #{e.message}" }
     end
 

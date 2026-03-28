@@ -18,13 +18,15 @@ module Publishers
 
     private
 
-    def build_connection(base_url, headers: {})
+    def build_connection(base_url, headers: {}, timeout: 15, open_timeout: 5)
       Faraday.new(url: base_url, headers: headers) do |f|
         f.request :multipart
         f.request :json
         f.response :json, content_type: /\bjson$/
         f.response :raise_error
         f.adapter Faraday.default_adapter
+        f.options.timeout = timeout
+        f.options.open_timeout = open_timeout
       end
     end
 
