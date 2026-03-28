@@ -67,6 +67,8 @@ module Publishers
         f.response :json, content_type: /\bjson$/
         f.response :raise_error
         f.adapter Faraday.default_adapter
+        f.options.timeout = 30
+        f.options.open_timeout = 5
       end
     end
   end

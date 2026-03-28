@@ -33,6 +33,8 @@ module Publishers
         upload_conn = Faraday.new do |f|
           f.response :raise_error
           f.adapter Faraday.default_adapter
+          f.options.timeout = 30
+          f.options.open_timeout = 5
         end
 
         upload_conn.put(upload_url) do |req|
@@ -157,6 +159,8 @@ module Publishers
       upload_conn = Faraday.new do |f|
         f.response :raise_error
         f.adapter Faraday.default_adapter
+        f.options.timeout = 30
+        f.options.open_timeout = 5
       end
 
       upload_conn.put(upload_url) do |req|

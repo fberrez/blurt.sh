@@ -1,0 +1,67 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+
+            # Clone or pull
+            if [ ! -d /opt/blurt ]; then
+              git clone https://github.com/fberrez/blurt.sh.git /opt/blurt
+            else
+              cd /opt/blurt
+              git fetch origin
+              git reset --hard origin/main
+            fi
+
+            cd /opt/blurt
+
+            # Write .env from secrets
+            cat > .env << 'ENVEOF'
+            BLUESKY_SERVICE=${{ secrets.BLUESKY_SERVICE }}
+            BLUESKY_IDENTIFIER=${{ secrets.BLUESKY_IDENTIFIER }}
+            BLUESKY_PASSWORD=${{ secrets.BLUESKY_PASSWORD }}
+            MASTODON_URL=${{ secrets.MASTODON_URL }}
+            MASTODON_ACCESS_TOKEN=${{ secrets.MASTODON_ACCESS_TOKEN }}
+            LINKEDIN_ACCESS_TOKEN=${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+            LINKEDIN_PERSON_ID=${{ secrets.LINKEDIN_PERSON_ID }}
+            RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
+            SECRET_KEY_BASE=${{ secrets.SECRET_KEY_BASE }}
+            BLURT_API_KEY=${{ secrets.BLURT_API_KEY }}
+            ENVEOF
+            sed -i 's/^[[:space:]]*//' .env
+
+            # Create queue dirs on host (mounted as volumes)
+            mkdir -p /opt/blurt/queue /opt/blurt/sent /opt/blurt/failed
+
+            # Build and run
+            docker build -t blurt .
+            docker stop blurt 2>/dev/null || true
+            docker rm blurt 2>/dev/null || true
+            docker run -d \
+              --name blurt \
+              --restart unless-stopped \
+              --env-file .env \
+              -e SOLID_QUEUE_IN_PUMA=true \
+              -p 127.0.0.1:3000:80 \
+              -v /opt/blurt/queue:/rails/queue \
+              -v /opt/blurt/sent:/rails/sent \
+              -v /opt/blurt/failed:/rails/failed \
+              -v blurt_storage:/rails/storage \
+              blurt
+
+            echo "Deployed successfully:"
+            docker ps --filter name=blurt --format "table {{.Status}}\t{{.Image}}"

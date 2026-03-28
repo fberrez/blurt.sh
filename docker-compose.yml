@@ -1,0 +1,25 @@
+services:
+  blurt:
+    build: .
+    ports:
+      - "${BLURT_PORT:-80}:80"
+    env_file: .env
+    environment:
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      SOLID_QUEUE_IN_PUMA: "true"
+    volumes:
+      - ./queue:/rails/queue
+      - ./sent:/rails/sent
+      - ./failed:/rails/failed
+      - blurt_storage:/rails/storage
+    restart: unless-stopped
+    stop_grace_period: 35s
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/up"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  blurt_storage:

@@ -207,7 +207,37 @@ bin/jobs
 The worker polls `queue/` every 60 seconds. To publish immediately, use the API (see below) or:
 
 ```bash
-bin/rails runner "ScanQueueJob.perform_now"
+rake blurt:scan
+```
+
+### Docker
+
+```bash
+cp .env.example .env
+# Edit .env with your platform credentials
+
+docker compose up -d
+```
+
+Posts go in `./queue/`, published posts land in `./sent/`. The container auto-restarts and polls every 60 seconds.
+
+```bash
+# Check health
+curl http://localhost/api/health
+
+# View logs
+docker compose logs -f
+
+# Stop
+docker compose down
+```
+
+### Rake Tasks
+
+```bash
+rake blurt:scan          # Scan queue and publish immediately
+rake blurt:platforms     # Show configured platforms
+rake blurt:linkedin_auth # Re-authenticate LinkedIn OAuth
 ```
 
 ## HTTP API
@@ -299,7 +329,7 @@ queue/     →  QueueScanner finds pending posts
 - [x] Social publishers — Bluesky (AT Protocol, facets, link previews), Mastodon, LinkedIn (OG thumbnails)
 - [x] Blog publishers — Medium, Dev.to, Substack (+ integration tests with webmock)
 - [x] HTTP API — CRUD posts, history, platforms, health, export (Bearer auth, PublishLog)
-- [ ] Docker deployment
+- [x] Docker deployment
 - [ ] CLI tool
 - [ ] MCP server for AI editors
 - [ ] Web dashboard

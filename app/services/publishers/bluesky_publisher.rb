@@ -132,6 +132,8 @@ module Publishers
           f.response :json, content_type: /\bjson$/
           f.response :raise_error
           f.adapter Faraday.default_adapter
+          f.options.timeout = 30
+          f.options.open_timeout = 5
         end
 
         resp = conn.post("/xrpc/com.atproto.repo.uploadBlob") do |req|
@@ -214,6 +216,8 @@ module Publishers
         f.response :json, content_type: /\bjson$/
         f.response :raise_error
         f.adapter Faraday.default_adapter
+        f.options.timeout = 30
+        f.options.open_timeout = 5
       end
 
       blob_resp = conn.post("/xrpc/com.atproto.repo.uploadBlob") do |req|
