@@ -4,6 +4,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/fberrez/blurt.sh/actions/workflows/ci.yml"><img src="https://github.com/fberrez/blurt.sh/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <img src="https://img.shields.io/badge/status-in%20development-orange?style=flat-square" alt="In Development" />
   <a href="https://github.com/fberrez/blurt.sh/stargazers"><img src="https://img.shields.io/github/stars/fberrez/blurt.sh?style=flat-square" alt="Stars" /></a>
   <a href="https://github.com/fberrez/blurt.sh/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License" /></a>
