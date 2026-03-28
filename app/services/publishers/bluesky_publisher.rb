@@ -52,7 +52,7 @@ module Publishers
       facets.concat(scan_with_byte_offsets(text, full_url_regex).map do |match_text, byte_start, byte_end|
         {
           index: { byteStart: byte_start, byteEnd: byte_end },
-          features: [{ "$type" => "app.bsky.richtext.facet#link", uri: match_text }]
+          features: [ { "$type" => "app.bsky.richtext.facet#link", uri: match_text } ]
         }
       end)
 
@@ -65,7 +65,7 @@ module Publishers
 
         facets << {
           index: { byteStart: byte_start, byteEnd: byte_end },
-          features: [{ "$type" => "app.bsky.richtext.facet#link", uri: "https://#{match_text}" }]
+          features: [ { "$type" => "app.bsky.richtext.facet#link", uri: "https://#{match_text}" } ]
         }
       end
 
@@ -82,7 +82,7 @@ module Publishers
 
         {
           index: { byteStart: byte_start, byteEnd: byte_end },
-          features: [{ "$type" => "app.bsky.richtext.facet#mention", did: did }]
+          features: [ { "$type" => "app.bsky.richtext.facet#mention", did: did } ]
         }
       end
     end
@@ -93,7 +93,7 @@ module Publishers
         tag = match_text.delete_prefix("#")
         {
           index: { byteStart: byte_start, byteEnd: byte_end },
-          features: [{ "$type" => "app.bsky.richtext.facet#tag", tag: tag }]
+          features: [ { "$type" => "app.bsky.richtext.facet#tag", tag: tag } ]
         }
       end
     end
@@ -108,7 +108,7 @@ module Publishers
         char_start = match.begin(0)
         byte_start = text[0...char_start].bytesize
         byte_end = byte_start + full_match.bytesize
-        results << [full_match, byte_start, byte_end]
+        results << [ full_match, byte_start, byte_end ]
       end
       results
     end

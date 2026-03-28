@@ -51,7 +51,7 @@ namespace :blurt do
       configured = BlurtConfig.platform_configured?(name)
       type = Post::BLOG_PLATFORMS.include?(name) ? "blog" : "social"
       status = configured ? "configured" : "not configured"
-      puts "  %-12s %-8s %s" % [name, "(#{type})", status]
+      puts "  %-12s %-8s %s" % [ name, "(#{type})", status ]
     end
 
     configured = BlurtConfig.configured_platforms

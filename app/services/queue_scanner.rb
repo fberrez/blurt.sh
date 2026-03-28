@@ -21,9 +21,9 @@ class QueueScanner
 
         post = if File.directory?(full_path)
                  parse_directory_post(full_path)
-               elsif entry.end_with?(".md")
+        elsif entry.end_with?(".md")
                  parse_flat_post(full_path)
-               end
+        end
 
         next unless post
         next if skip_scheduled?(post)
