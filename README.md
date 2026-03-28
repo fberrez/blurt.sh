@@ -136,6 +136,14 @@ bin/rails db:prepare
 
 Edit `.env` with your credentials. You only need to configure the platforms you want to use.
 
+**API Key** — generate a random secret for API authentication:
+```bash
+openssl rand -hex 32
+```
+```
+BLURT_API_KEY=your-generated-secret
+```
+
 **Bluesky** — uses an [app password](https://bsky.app/settings/app-passwords):
 ```
 BLUESKY_SERVICE=https://bsky.social
@@ -196,10 +204,68 @@ bin/rails server
 bin/jobs
 ```
 
-The worker polls `queue/` every 60 seconds. To publish immediately:
+The worker polls `queue/` every 60 seconds. To publish immediately, use the API (see below) or:
 
 ```bash
 bin/rails runner "ScanQueueJob.perform_now"
+```
+
+## HTTP API
+
+All endpoints require `Authorization: Bearer <key>` (matching the `BLURT_API_KEY` env var), except `/api/health`.
+
+```bash
+export BLURT_API_KEY=your-secret-key
+```
+
+### Posts
+
+```bash
+# List queued posts
+curl http://localhost:3000/api/posts -H "Authorization: Bearer $BLURT_API_KEY"
+
+# List by status (queue, sent, failed, all)
+curl "http://localhost:3000/api/posts?status=sent" -H "Authorization: Bearer $BLURT_API_KEY"
+
+# Filter by platform
+curl "http://localhost:3000/api/posts?platform=bluesky" -H "Authorization: Bearer $BLURT_API_KEY"
+
+# Get a single post
+curl http://localhost:3000/api/posts/my-post.md -H "Authorization: Bearer $BLURT_API_KEY"
+
+# Create a post
+curl -X POST http://localhost:3000/api/posts \
+  -H "Authorization: Bearer $BLURT_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"My Post","platforms":["bluesky","mastodon"],"content":"Hello world!"}'
+
+# Update a queued post
+curl -X PUT http://localhost:3000/api/posts/my-post.md \
+  -H "Authorization: Bearer $BLURT_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Updated Title","content":"New content"}'
+
+# Delete a queued post
+curl -X DELETE http://localhost:3000/api/posts/my-post.md -H "Authorization: Bearer $BLURT_API_KEY"
+
+# Publish immediately (bypass 60s poll)
+curl -X POST http://localhost:3000/api/posts/my-post.md/publish -H "Authorization: Bearer $BLURT_API_KEY"
+```
+
+### History, Platforms, Health & Export
+
+```bash
+# Publishing history (paginated, filterable)
+curl "http://localhost:3000/api/history?page=1&per_page=10" -H "Authorization: Bearer $BLURT_API_KEY"
+
+# Configured platforms
+curl http://localhost:3000/api/platforms -H "Authorization: Bearer $BLURT_API_KEY"
+
+# Health check (no auth required)
+curl http://localhost:3000/api/health
+
+# Export all sent posts as ZIP
+curl http://localhost:3000/api/export -H "Authorization: Bearer $BLURT_API_KEY" -o export.zip
 ```
 
 ## Architecture
@@ -232,7 +298,7 @@ queue/     →  QueueScanner finds pending posts
 - [x] Queue engine — QueueScanner, PostMover, ImageProcessor, PublishOrchestrator, file locking
 - [x] Social publishers — Bluesky (AT Protocol, facets, link previews), Mastodon, LinkedIn (OG thumbnails)
 - [x] Blog publishers — Medium, Dev.to, Substack (+ integration tests with webmock)
-- [ ] HTTP API — CRUD posts, history, platforms, health, export
+- [x] HTTP API — CRUD posts, history, platforms, health, export (Bearer auth, PublishLog)
 - [ ] Docker deployment
 - [ ] CLI tool
 - [ ] MCP server for AI editors

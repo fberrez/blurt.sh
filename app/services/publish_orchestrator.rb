@@ -22,11 +22,13 @@ class PublishOrchestrator
       all_succeeded = results.values.none? { |r| r[:error] }
 
       if all_succeeded
-        PostMover.move_to_sent(post, results, source_path: locked_path)
+        dest = PostMover.move_to_sent(post, results, source_path: locked_path)
         log_results(post, results, :sent)
+        record_publish_log(post, results, :sent, dest)
       else
-        PostMover.move_to_failed(post, results, source_path: locked_path)
+        dest = PostMover.move_to_failed(post, results, source_path: locked_path)
         log_results(post, results, :failed)
+        record_publish_log(post, results, :failed, dest)
       end
 
       results
@@ -67,6 +69,12 @@ class PublishOrchestrator
 
     def publisher_for(platform)
       "Publishers::#{platform.camelize}Publisher".constantize
+    end
+
+    def record_publish_log(post, results, status, destination_path)
+      PublishLog.record!(post: post, results: results, status: status, destination_path: destination_path)
+    rescue => e
+      Rails.logger.error "[blurt] PublishLog write failed: #{e.message}"
     end
 
     def log_results(post, results, destination)
