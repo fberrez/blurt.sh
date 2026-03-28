@@ -1,0 +1,14 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "27cb136b9542c7825c73e779c883b1a0d05e92498249a15dfc148387cdeddbf7",
+      "note": "resolve_queue_path validates path stays within QUEUE_DIR via expand_path + start_with? check"
+    },
+    {
+      "fingerprint": "f4993c908036cbe57025b4a57928ae04a3c9655937f9edce140211ff89fd9d94",
+      "note": "resolve_queue_path validates path stays within QUEUE_DIR via expand_path + start_with? check"
+    }
+  ],
+  "updated": "2026-03-28",
+  "brakeman_version": "8.0.4"
+}

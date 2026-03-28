@@ -187,7 +187,8 @@ module Api
 
     def resolve_queue_path(id)
       decoded = CGI.unescape(id)
-      path = File.join(QueueScanner::QUEUE_DIR, decoded)
+      path = File.expand_path(decoded, QueueScanner::QUEUE_DIR)
+      return nil unless path.start_with?(QueueScanner::QUEUE_DIR + "/")
       File.exist?(path) ? path : nil
     end
 
