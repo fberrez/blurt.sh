@@ -65,7 +65,7 @@ class QueueScanner
 
     def parse_flat_post(path)
       Post.from_file(path)
-    rescue ArgumentError, FrontMatterParser::SyntaxError => e
+    rescue ArgumentError, Psych::SyntaxError => e
       Rails.logger.warn "[blurt] Skipping #{File.basename(path)}: #{e.message}"
       nil
     end
@@ -78,7 +78,7 @@ class QueueScanner
       end
 
       Post.from_file(md_path)
-    rescue ArgumentError, FrontMatterParser::SyntaxError => e
+    rescue ArgumentError, Psych::SyntaxError => e
       Rails.logger.warn "[blurt] Skipping #{File.basename(dir_path)}: #{e.message}"
       nil
     end
