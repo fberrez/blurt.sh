@@ -242,6 +242,46 @@ rake blurt:platforms     # Show configured platforms
 rake blurt:linkedin_auth # Re-authenticate LinkedIn OAuth
 ```
 
+## CLI
+
+The `blurt` CLI wraps the HTTP API — works against any Blurt server (local or remote).
+
+### Install
+
+```bash
+cd cli
+bundle install
+```
+
+### Configuration
+
+The CLI reads credentials in order: flags > env vars > config file.
+
+```bash
+export BLURT_API_URL=http://localhost:3000   # default
+export BLURT_API_KEY=your-secret-key
+```
+
+### Commands
+
+```bash
+# Server health + queue status (no auth needed)
+blurt status
+
+# List queued posts
+blurt queue
+
+# Filter by status or platform
+blurt queue --status sent
+blurt queue --platform bluesky
+
+# Override API URL or key per-command
+blurt status --api-url https://your-vps.com --api-key your-key
+
+# Version
+blurt version
+```
+
 ## HTTP API
 
 All endpoints require `Authorization: Bearer <key>` (matching the `BLURT_API_KEY` env var), except `/api/health`.
@@ -323,6 +363,7 @@ queue/     →  QueueScanner finds pending posts
 | Database | SQLite (metadata only) |
 | Image processing | libvips via image_processing gem |
 | HTTP client | Faraday + faraday-multipart |
+| CLI | Thor |
 
 ## Roadmap
 
@@ -332,7 +373,7 @@ queue/     →  QueueScanner finds pending posts
 - [x] Blog publishers — Medium, Dev.to, Substack (+ integration tests with webmock)
 - [x] HTTP API — CRUD posts, history, platforms, health, export (Bearer auth, PublishLog)
 - [x] Docker deployment
-- [ ] CLI tool
+- [x] CLI tool (`blurt status`, `blurt queue`)
 - [ ] MCP server for AI editors
 - [ ] Web dashboard
 - [ ] Hosted version at blurt.sh

@@ -10,8 +10,8 @@ class MarkdownProcessor
         .gsub(/\[([^\]]+)\]\([^)]+\)/, '\1')         # Links → text only
         .gsub(/(\*{1,3}|_{1,3})(.*?)\1/, '\2')       # Bold/italic markers
         .gsub(/~~(.*?)~~/m, '\1')                     # Strikethrough
-        .gsub(/`([^`]+)`/, '\1')                      # Inline code
         .gsub(/```[\s\S]*?```/, "")                   # Code blocks
+        .gsub(/`([^`]+)`/, '\1')                      # Inline code
         .gsub(HEADING_REGEX, "")                      # Heading markers
         .gsub(/^>\s+/m, "")                           # Blockquote markers
         .gsub(/^[-*_]{3,}\s*$/m, "")                  # Horizontal rules

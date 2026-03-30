@@ -49,3 +49,7 @@
 !/sent/.gitkeep
 /failed/*
 !/failed/.gitkeep
+
+# CLI gem build artifacts
+/cli/pkg/
+/cli/*.gem
