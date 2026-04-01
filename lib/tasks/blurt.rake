@@ -32,6 +32,9 @@ namespace :blurt do
             puts "  #{platform}: FAILED -- #{result[:error]}"
           end
         end
+      rescue PublishOrchestrator::PostPublishedError => e
+        puts "  #{e.message}"
+        puts "  File left at #{locked_path} -- resolve manually"
       rescue => e
         puts "  Error: #{e.message}"
         QueueScanner.unlock!(locked_path, post.file_path) rescue nil
