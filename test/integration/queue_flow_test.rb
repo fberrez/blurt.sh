@@ -11,7 +11,7 @@ class QueueFlowTest < ActiveSupport::TestCase
     @queue_dir = File.join(@tmp_dir, "queue")
     @sent_dir = File.join(@tmp_dir, "sent")
     @failed_dir = File.join(@tmp_dir, "failed")
-    FileUtils.mkdir_p([ @queue_dir, @sent_dir, @failed_dir ])
+    FileUtils.mkdir_p([@queue_dir, @sent_dir, @failed_dir])
 
     # Override directory constants to use temp dirs
     @original_scanner_dir = QueueScanner::QUEUE_DIR
@@ -91,7 +91,7 @@ class QueueFlowTest < ActiveSupport::TestCase
 
     # Parse enriched frontmatter
     sent_content = File.read(File.join(@sent_dir, sent_files.first))
-    loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [ Time, Date ])
+    loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Time, Date])
     parsed = FrontMatterParser::Parser.new(:md, loader: loader).call(sent_content)
     fm = parsed.front_matter
 
@@ -160,7 +160,7 @@ class QueueFlowTest < ActiveSupport::TestCase
 
     # Parse enriched frontmatter
     failed_content = File.read(File.join(@failed_dir, failed_files.first))
-    loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [ Time, Date ])
+    loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Time, Date])
     parsed = FrontMatterParser::Parser.new(:md, loader: loader).call(failed_content)
     fm = parsed.front_matter
 

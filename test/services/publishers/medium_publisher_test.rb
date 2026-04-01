@@ -84,7 +84,7 @@ class Publishers::MediumPublisherTest < ActiveSupport::TestCase
 
   test "raises on API error" do
     stub_request(:get, "https://api.medium.com/v1/me")
-      .to_return(status: 401, body: { errors: [ { message: "Token invalid" } ] }.to_json)
+      .to_return(status: 401, body: { errors: [{ message: "Token invalid" }] }.to_json)
 
     assert_raises(Faraday::UnauthorizedError) do
       Publishers::MediumPublisher.publish(@post, config: @config)

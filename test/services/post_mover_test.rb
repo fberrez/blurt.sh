@@ -8,7 +8,7 @@ class PostMoverTest < ActiveSupport::TestCase
     @queue_dir = File.join(@test_root, "queue")
     @sent_dir = File.join(@test_root, "sent")
     @failed_dir = File.join(@test_root, "failed")
-    FileUtils.mkdir_p([ @queue_dir, @sent_dir, @failed_dir ])
+    FileUtils.mkdir_p([@queue_dir, @sent_dir, @failed_dir])
 
     # Override constants
     @originals = {
