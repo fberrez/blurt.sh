@@ -10,12 +10,12 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   namespace :api do
-    resources :posts, only: [:index, :show, :create, :update, :destroy], id: /[^\/]+/ do
+    resources :posts, only: [ :index, :show, :create, :update, :destroy ], id: /[^\/]+/ do
       member do
         post :publish
       end
     end
-    resources :history, only: [:index, :show], id: /[^\/]+/
+    resources :history, only: [ :index, :show ], id: /[^\/]+/
     get :platforms, to: "platforms#index"
     get :health, to: "health#show"
     get :export, to: "exports#show"
