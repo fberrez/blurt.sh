@@ -9,7 +9,7 @@ class Api::HealthControllerTest < ActionDispatch::IntegrationTest
     @queue_dir = File.join(@tmp_dir, "queue")
     @sent_dir = File.join(@tmp_dir, "sent")
     @failed_dir = File.join(@tmp_dir, "failed")
-    FileUtils.mkdir_p([ @queue_dir, @sent_dir, @failed_dir ])
+    FileUtils.mkdir_p([@queue_dir, @sent_dir, @failed_dir])
 
     @original_scanner_dir = QueueScanner::QUEUE_DIR
     @original_mover_sent = PostMover::SENT_DIR

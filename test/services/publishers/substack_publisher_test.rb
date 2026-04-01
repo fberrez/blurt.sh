@@ -28,8 +28,8 @@ class Publishers::SubstackPublisherTest < ActiveSupport::TestCase
 
     email = ActionMailer::Base.deliveries.last
     assert_equal "My Substack Draft", email.subject
-    assert_equal [ "author@example.com" ], email.from
-    assert_equal [ "import@substack.com" ], email.to
+    assert_equal ["author@example.com"], email.from
+    assert_equal ["import@substack.com"], email.to
 
     assert result[:url].start_with?("message-id:")
     assert_kind_of Time, result[:published_at]

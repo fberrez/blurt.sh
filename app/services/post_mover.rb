@@ -63,7 +63,7 @@ class PostMover
     # Parse frontmatter, merge new keys, rewrite the file.
     def enrich_file(md_path, additions)
       raw = File.read(md_path)
-      loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [ Time, Date ])
+      loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Time, Date])
       parsed = FrontMatterParser::Parser.new(:md, loader: loader).call(raw)
 
       merged = parsed.front_matter.merge(additions)

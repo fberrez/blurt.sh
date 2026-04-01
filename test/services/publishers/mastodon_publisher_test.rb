@@ -112,7 +112,7 @@ class Publishers::MastodonPublisherTest < ActiveSupport::TestCase
         headers: { "Content-Type" => "application/json" }
       )
 
-    images = [ {
+    images = [{
       io: StringIO.new("fake-image"),
       filename: "photo.jpg",
       alt: "A photo",

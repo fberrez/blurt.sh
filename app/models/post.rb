@@ -23,7 +23,7 @@ class Post
     path = Pathname.new(path).expand_path
     raw = path.read
 
-    loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [ Time, Date ])
+    loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Time, Date])
     parsed = FrontMatterParser::Parser.new(:md, loader: loader).call(raw)
     frontmatter = parsed.front_matter
     content = parsed.content.strip

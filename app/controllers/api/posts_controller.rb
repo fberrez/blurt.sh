@@ -158,16 +158,16 @@ module Api
 
     def find_post_across_dirs(id)
       [
-        [ QueueScanner::QUEUE_DIR, "queue" ],
-        [ PostMover::SENT_DIR, "sent" ],
-        [ PostMover::FAILED_DIR, "failed" ]
+        [QueueScanner::QUEUE_DIR, "queue"],
+        [PostMover::SENT_DIR, "sent"],
+        [PostMover::FAILED_DIR, "failed"]
       ].each do |dir, status|
         path = resolve_in_dir(dir, id)
         next unless path
         post = safe_parse(path)
-        return [ post, status ] if post
+        return [post, status] if post
       end
-      [ nil, nil ]
+      [nil, nil]
     end
 
     def resolve_in_dir(dir, id)
