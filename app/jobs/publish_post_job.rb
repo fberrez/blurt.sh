@@ -11,6 +11,13 @@ class PublishPostJob < ApplicationJob
     PublishOrchestrator.publish(post, locked_path: locked_path)
   rescue Errno::ENOENT
     raise # Let discard_on handle it
+  rescue PublishOrchestrator::PostPublishedError => e
+    # Publishing succeeded but post-publish steps (move to sent/failed) failed.
+    # Do NOT unlock — the post was already published. Unlocking would cause
+    # the next scan to re-publish it, creating duplicate posts every minute.
+    Rails.logger.error "[blurt] Post-publish failed for #{File.basename(original_path)}: #{e.message}"
+    Rails.logger.error "[blurt] File left at #{locked_path} — resolve manually"
+    raise
   rescue => e
     Rails.logger.error "[blurt] PublishPostJob failed for #{File.basename(original_path)}: #{e.message}"
     QueueScanner.unlock!(locked_path, original_path) rescue nil

@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class PublishOrchestrator
+  # Raised when publishing succeeded but post-publish steps failed.
+  # This signals to the job that the file must NOT be unlocked back to queue
+  # (since that would cause duplicate posts on the next scan).
+  class PostPublishedError < StandardError; end
+
   class << self
     # Publish a post to all its configured platforms in parallel.
     # locked_path is the actual filesystem location (with .publishing suffix).
@@ -19,6 +24,17 @@ class PublishOrchestrator
 
       results = publish_in_parallel(platforms, post, processed_images)
 
+      move_and_log(post, results, locked_path)
+
+      results
+    end
+
+    private
+
+    # Wrap post-publish steps so that failures after publishing raise
+    # PostPublishedError instead of a generic error. This prevents the
+    # job from unlocking the file back to queue and causing re-publishes.
+    def move_and_log(post, results, locked_path)
       all_succeeded = results.values.none? { |r| r[:error] }
 
       if all_succeeded
@@ -30,11 +46,9 @@ class PublishOrchestrator
         log_results(post, results, :failed)
         record_publish_log(post, results, :failed, dest)
       end
-
-      results
+    rescue => e
+      raise PostPublishedError, "Published but failed to move: #{e.class}: #{e.message}"
     end
-
-    private
 
     def publishable_platforms(post)
       post.platforms & BlurtConfig.configured_platforms
