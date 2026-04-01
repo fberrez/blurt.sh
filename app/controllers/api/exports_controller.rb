@@ -39,7 +39,7 @@ module Api
         next if File.directory?(full_path)
         next if File.basename(full_path) == ".gitkeep"
         relative = Pathname.new(full_path).relative_path_from(Pathname.new(dir)).to_s
-        files << [relative, full_path]
+        files << [ relative, full_path ]
       end
       files
     end

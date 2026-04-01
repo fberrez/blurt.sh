@@ -77,7 +77,7 @@ class Publishers::LinkedinPublisherTest < ActiveSupport::TestCase
 
     stub_create_post
 
-    images = [{
+    images = [ {
       io: StringIO.new("fake-image-data"),
       filename: "photo.jpg",
       alt: "A photo",
