@@ -221,7 +221,9 @@ cp .env.example .env
 docker compose up -d
 ```
 
-Posts go in `./queue/`, published posts land in `./sent/`. The container auto-restarts and polls every 60 seconds.
+Posts go in `./queue/`, published posts land in `./sent/`. The container runs as **UID 1000** and auto-restarts, polling every 60 seconds.
+
+> **Remote server?** If you push files via `scp` as root, fix ownership so the container can process them: `ssh root@your-server "chown -R 1000:1000 /opt/blurt/queue/"`
 
 ```bash
 # Check health
