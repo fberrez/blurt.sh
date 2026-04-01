@@ -42,7 +42,7 @@ class ClientTest < Minitest::Test
   def test_list_posts_with_filters
     stub_request(:get, "http://localhost:3000/api/posts")
       .with(query: { status: "sent", platform: "bluesky" })
-      .to_return(status: 200, body: { posts: [{ id: "test.md" }] }.to_json, headers: json_headers)
+      .to_return(status: 200, body: { posts: [ { id: "test.md" } ] }.to_json, headers: json_headers)
 
     result = @client.list_posts(status: "sent", platform: "bluesky")
     assert_equal 1, result["posts"].length
@@ -146,7 +146,7 @@ class ClientTest < Minitest::Test
 
   def test_platforms
     stub_request(:get, "http://localhost:3000/api/platforms")
-      .to_return(status: 200, body: { platforms: [{ name: "bluesky", configured: true }] }.to_json, headers: json_headers)
+      .to_return(status: 200, body: { platforms: [ { name: "bluesky", configured: true } ] }.to_json, headers: json_headers)
 
     result = @client.platforms
     assert_equal "bluesky", result["platforms"].first["name"]

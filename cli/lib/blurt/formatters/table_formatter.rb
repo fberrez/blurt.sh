@@ -5,7 +5,7 @@ module Blurt
     class TableFormatter
       def self.print_posts(posts)
         puts "#{posts.length} post(s):\n\n"
-        rows = [%w[FILENAME PLATFORMS STATUS SCHEDULED]]
+        rows = [ %w[FILENAME PLATFORMS STATUS SCHEDULED] ]
         posts.each do |post|
           rows << [
             post["filename"],
