@@ -25,16 +25,17 @@ module Blurt
         )
 
         post = data["post"]
-        puts "Post created: #{post['filename']}"
+        Output.success("Post created: #{post['filename']}")
         puts "  Platforms: #{Array(post['platforms']).join(', ')}"
         puts "  Status:    #{post['status']}"
         puts "  Scheduled: #{post['scheduled_at']}" if post["scheduled_at"]
       rescue Client::AuthenticationError
-        $stderr.puts "Error: Invalid API key."
-        $stderr.puts "Set BLURT_API_KEY or run: blurt config"
+        Output.error("Invalid API key.")
+        $stderr.puts "  Set BLURT_API_KEY or run: blurt config set api_key YOUR_KEY"
         exit 1
       rescue Client::ConnectionError => e
-        $stderr.puts "Error: #{e.message}"
+        Output.error(e.message)
+        $stderr.puts "  Is the Blurt server running at #{@config.api_url}?"
         exit 1
       end
 
@@ -43,15 +44,16 @@ module Blurt
       def validate_config!
         return if @config.valid?
 
-        $stderr.puts "Error: No API key configured."
-        $stderr.puts "Set BLURT_API_KEY environment variable or run: blurt config"
+        Output.error("No API key configured.")
+        $stderr.puts "  Set BLURT_API_KEY environment variable"
+        $stderr.puts "  or run: blurt config set api_key YOUR_KEY"
         exit 1
       end
 
       def resolve_content(content, file)
         if file
           unless File.exist?(file)
-            $stderr.puts "Error: File not found: #{file}"
+            Output.error("File not found: #{file}")
             exit 1
           end
           raw = File.read(file)
@@ -60,7 +62,7 @@ module Blurt
         elsif content
           [content, {}]
         else
-          $stderr.puts "Error: Provide content as an argument or use --file."
+          Output.error("Provide content as an argument or use --file.")
           exit 1
         end
       end
@@ -71,14 +73,14 @@ module Blurt
         elsif file_meta["platforms"]
           Array(file_meta["platforms"])
         else
-          $stderr.puts "Error: No platforms specified. Use --platforms or add platforms to frontmatter."
+          Output.error("No platforms specified. Use --platforms or add platforms to frontmatter.")
           exit 1
         end
       end
 
       def validate_input!(content, platforms)
         if content.nil? || content.strip.empty?
-          $stderr.puts "Error: Post content cannot be empty."
+          Output.error("Post content cannot be empty.")
           exit 1
         end
       end

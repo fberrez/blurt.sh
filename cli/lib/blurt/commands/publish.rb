@@ -14,7 +14,7 @@ module Blurt
         data = @client.publish_post(id)
         post = data["post"]
 
-        puts "Published: #{post['filename']}"
+        Output.success("Published: #{post['filename']}")
         puts "  Status: #{post['status']}"
 
         results = post["results"] || {}
@@ -26,14 +26,16 @@ module Blurt
           end
         end
       rescue Client::AuthenticationError
-        $stderr.puts "Error: Invalid API key."
-        $stderr.puts "Set BLURT_API_KEY or run: blurt config"
+        Output.error("Invalid API key.")
+        $stderr.puts "  Set BLURT_API_KEY or run: blurt config set api_key YOUR_KEY"
         exit 1
       rescue Client::NotFoundError
-        $stderr.puts "Error: Post not found: #{id}"
+        Output.error("Post not found: #{id}")
+        $stderr.puts "  Run 'blurt queue' to see available posts."
         exit 1
       rescue Client::ConnectionError => e
-        $stderr.puts "Error: #{e.message}"
+        Output.error(e.message)
+        $stderr.puts "  Is the Blurt server running at #{@config.api_url}?"
         exit 1
       end
 
@@ -42,8 +44,9 @@ module Blurt
       def validate_config!
         return if @config.valid?
 
-        $stderr.puts "Error: No API key configured."
-        $stderr.puts "Set BLURT_API_KEY environment variable or run: blurt config"
+        Output.error("No API key configured.")
+        $stderr.puts "  Set BLURT_API_KEY environment variable"
+        $stderr.puts "  or run: blurt config set api_key YOUR_KEY"
         exit 1
       end
     end

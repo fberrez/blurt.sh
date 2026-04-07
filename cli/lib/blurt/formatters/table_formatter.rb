@@ -35,8 +35,10 @@ module Blurt
 
       def self.print_table(rows)
         widths = rows.transpose.map { |col| col.map(&:to_s).map(&:length).max }
-        rows.each do |row|
-          puts "  " + row.zip(widths).map { |val, w| val.to_s.ljust(w) }.join("  ")
+        rows.each_with_index do |row, idx|
+          formatted = row.zip(widths).map { |val, w| val.to_s.ljust(w) }.join("  ")
+          formatted = Output.colorize(formatted, :bold) if idx.zero?
+          puts "  #{formatted}"
         end
       end
 
