@@ -22,6 +22,37 @@ module Blurt
       )
     end
 
+    desc "post [CONTENT]", "Create a new post"
+    option :file, type: :string, aliases: "-f", desc: "Read content from a markdown file"
+    option :platforms, type: :string, aliases: "-p", desc: "Comma-separated platforms (e.g. bluesky,mastodon)"
+    option :title, type: :string, aliases: "-t", desc: "Post title (required for blog platforms)"
+    option :scheduled_at, type: :string, desc: "Schedule publish time (ISO 8601)"
+    def post(content = nil)
+      platforms = options[:platforms]&.split(",")&.map(&:strip)
+      Commands::Post.new(build_config).run(
+        content: content,
+        file: options[:file],
+        platforms: platforms,
+        title: options[:title],
+        scheduled_at: options[:scheduled_at]
+      )
+    end
+
+    desc "publish ID", "Publish a queued post immediately"
+    def publish(id)
+      Commands::Publish.new(build_config).run(id: id)
+    end
+
+    desc "history", "List published posts"
+    option :page, type: :numeric, desc: "Page number"
+    option :platform, type: :string, desc: "Filter by platform"
+    def history
+      Commands::History.new(build_config).run(
+        page: options[:page],
+        platform: options[:platform]
+      )
+    end
+
     desc "version", "Print blurt version"
     def version
       puts "blurt #{Blurt::VERSION}"

@@ -277,6 +277,22 @@ blurt queue
 blurt queue --status sent
 blurt queue --platform bluesky
 
+# Create a post (inline content)
+blurt post "Hello world!" --platforms bluesky,mastodon
+
+# Create a post from a markdown file (reads frontmatter)
+blurt post --file ./my-post.md
+
+# Create a post with all options
+blurt post "Long article here" --platforms devto --title "My Article" --scheduled-at 2026-04-01T09:00:00Z
+
+# Publish a queued post immediately
+blurt publish my-post.md
+
+# View published posts (system of record)
+blurt history
+blurt history --platform bluesky --page 2
+
 # Override API URL or key per-command
 blurt status --api-url https://your-vps.com --api-key your-key
 
