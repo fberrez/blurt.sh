@@ -53,12 +53,20 @@ module Blurt
       )
     end
 
+    desc "delete ID", "Delete a queued post"
+    def delete(id)
+      Commands::Delete.new(build_config).run(id: id)
+    end
+
     desc "version", "Print blurt version"
     def version
       puts "blurt #{Blurt::VERSION}"
     end
 
     map %w[-v --version] => :version
+
+    desc "config SUBCOMMAND", "Manage configuration (api_url, api_key)"
+    subcommand "config", Blurt::ConfigCLI
 
     private
 

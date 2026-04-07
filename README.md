@@ -260,8 +260,16 @@ bundle install
 The CLI reads credentials in order: flags > env vars > config file.
 
 ```bash
+# Option 1: Environment variables
 export BLURT_API_URL=http://localhost:3000   # default
 export BLURT_API_KEY=your-secret-key
+
+# Option 2: Config command (saves to ~/.config/blurt/config.yml)
+blurt config set api_url https://your-vps.com
+blurt config set api_key your-secret-key
+
+# View current config (API key is masked)
+blurt config show
 ```
 
 ### Commands
@@ -288,6 +296,9 @@ blurt post "Long article here" --platforms devto --title "My Article" --schedule
 
 # Publish a queued post immediately
 blurt publish my-post.md
+
+# Delete a queued post
+blurt delete my-post.md
 
 # View published posts (system of record)
 blurt history
@@ -391,7 +402,7 @@ queue/     →  QueueScanner finds pending posts
 - [x] Blog publishers — Medium, Dev.to, Substack (+ integration tests with webmock)
 - [x] HTTP API — CRUD posts, history, platforms, health, export (Bearer auth, PublishLog)
 - [x] Docker deployment
-- [x] CLI tool (`blurt status`, `blurt queue`)
+- [x] CLI tool (`blurt status`, `blurt queue`, `blurt post`, `blurt publish`, `blurt history`, `blurt delete`, `blurt config`)
 - [ ] MCP server for AI editors
 - [ ] Web dashboard
 - [ ] Hosted version at blurt.sh

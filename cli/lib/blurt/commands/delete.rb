@@ -2,33 +2,23 @@
 
 module Blurt
   module Commands
-    class History
+    class Delete
       def initialize(config)
         @config = config
         @client = Client.new(config)
       end
 
-      def run(page: nil, platform: nil)
+      def run(id:)
         validate_config!
-
-        data = @client.history(page: page, platform: platform)
-        entries = data["history"]
-
-        if entries.empty?
-          puts "No published posts found."
-          return
-        end
-
-        Formatters::TableFormatter.print_history(entries)
-
-        total = data["total"] || 0
-        current_page = data["page"] || 1
-        per_page = data["per_page"] || 25
-        total_pages = (total.to_f / per_page).ceil
-        puts "\n  Page #{current_page} of #{total_pages} (#{total} total)"
+        @client.delete_post(id)
+        Output.success("Deleted: #{id}")
       rescue Client::AuthenticationError
         Output.error("Invalid API key.")
         $stderr.puts "  Set BLURT_API_KEY or run: blurt config set api_key YOUR_KEY"
+        exit 1
+      rescue Client::NotFoundError
+        Output.error("Post not found: #{id}")
+        $stderr.puts "  Run 'blurt queue' to see available posts."
         exit 1
       rescue Client::ConnectionError => e
         Output.error(e.message)
