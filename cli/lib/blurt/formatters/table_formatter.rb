@@ -17,10 +17,36 @@ module Blurt
         print_table(rows)
       end
 
+      def self.print_history(entries)
+        puts "#{entries.length} published post(s):\n\n"
+        rows = [%w[FILENAME PLATFORMS PUBLISHED URLS]]
+        entries.each do |entry|
+          results = entry["results"] || {}
+          urls = results.map { |_platform, r| r["url"] }.compact
+          rows << [
+            entry["filename"],
+            Array(entry["platforms"]).join(", "),
+            entry["published_at"] || "\u2014",
+            truncate_urls(urls)
+          ]
+        end
+        print_table(rows)
+      end
+
       def self.print_table(rows)
         widths = rows.transpose.map { |col| col.map(&:to_s).map(&:length).max }
         rows.each do |row|
           puts "  " + row.zip(widths).map { |val, w| val.to_s.ljust(w) }.join("  ")
+        end
+      end
+
+      def self.truncate_urls(urls)
+        return "\u2014" if urls.empty?
+
+        if urls.length == 1
+          urls.first
+        else
+          "#{urls.first} (+#{urls.length - 1} more)"
         end
       end
     end
