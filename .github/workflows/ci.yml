@@ -109,3 +109,22 @@ jobs:
       - name: Run CLI tests
         run: bundle exec rake test
 
+  test_mcp:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mcp
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+          working-directory: mcp
+
+      - name: Run MCP tests
+        run: bundle exec rake test
+
