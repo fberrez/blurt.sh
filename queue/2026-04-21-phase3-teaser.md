@@ -5,10 +5,4 @@ platforms:
 scheduledAt: 2026-04-21T13:00:00
 ---
 
-Phase 2 wrap: CLI + MCP shipped, 9 days late.
-
-Phase 3 starts today: web UI. Also already behind — it was meant to start a week ago.
-
-The plan: queue / history / compose / calendar views in Rails + Hotwire.
-
-Building in public means also shipping the slippage.
+phase 2 wrap: done 9 days late. phase 3 starts today, already a week behind. at this point the deadlines are suggestions. next up: rails + hotwire web dashboard. we keep shipping. #ai #webdev #indiedev #buildinpublic
