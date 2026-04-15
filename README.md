@@ -311,6 +311,75 @@ blurt status --api-url https://your-vps.com --api-key your-key
 blurt version
 ```
 
+## MCP Server
+
+Publish from Claude Code, Cursor, Windsurf, or any AI editor that speaks the
+[Model Context Protocol](https://modelcontextprotocol.io). The `blurt-mcp` gem
+lives in `mcp/` and is a thin wrapper around the same HTTP API the CLI uses.
+
+```bash
+cd mcp
+bundle install
+```
+
+### Claude Code
+
+Blurt ships a ready-to-use `.mcp.json` at the repo root:
+
+```json
+{
+  "mcpServers": {
+    "blurt": {
+      "command": "bundle",
+      "args": ["exec", "mcp/bin/blurt-mcp"],
+      "env": {
+        "BLURT_API_URL": "http://localhost:3000",
+        "BLURT_API_KEY": "${BLURT_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+```bash
+export BLURT_API_KEY=your-secret-key
+claude     # Claude Code launches the MCP server over stdio
+```
+
+### Tools (7)
+
+| Tool            | Description                                                  |
+| --------------- | ------------------------------------------------------------ |
+| `create-post`   | Create and queue a new post                                  |
+| `list-queue`    | List queued posts                                            |
+| `list-history`  | List published posts (system of record)                      |
+| `get-post`      | Fetch a single post by ID/filename                           |
+| `publish-now`   | Force-publish a queued post immediately                      |
+| `delete-post`   | Delete a queued post                                         |
+| `get-platforms` | Show configured platforms                                    |
+
+### Resources (2)
+
+| URI                  | Content                                       |
+| -------------------- | --------------------------------------------- |
+| `blurt://queue`      | JSON snapshot of pending posts                |
+| `blurt://platforms`  | JSON list of configured platforms             |
+
+### Remote / HTTP transport
+
+For non-local setups (VPS, team servers), use the streamable HTTP transport:
+
+```bash
+BLURT_API_URL=http://localhost:3000 \
+BLURT_API_KEY=your-key \
+bundle exec mcp/bin/blurt-mcp-http
+
+# Listening on http://0.0.0.0:3333/mcp
+```
+
+Point an MCP client at `https://blurt.your-vps.com/mcp` (behind TLS). Full
+setup guide: [blurt.sh/docs/mcp](https://blurt.sh/docs/mcp).
+
 ## HTTP API
 
 All endpoints require `Authorization: Bearer <key>` (matching the `BLURT_API_KEY` env var), except `/api/health`.

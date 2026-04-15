@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    blurt (0.1.0)
+    blurt (0.2.0)
       faraday (~> 2.0)
       thor (~> 1.3)
 
