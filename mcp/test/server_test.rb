@@ -5,9 +5,7 @@ require "json"
 
 class ServerTest < Minitest::Test
   def setup
-    @config = Blurt::Config.new(api_url: "http://localhost:3000", api_key: "test-key")
-    @server = BlurtMcp::Server.build(@config)
-    initialize_server!
+    @server = build_server
   end
 
   # --- Server setup ---
@@ -20,13 +18,23 @@ class ServerTest < Minitest::Test
     assert_equal Blurt::VERSION, @server.version
   end
 
-  def test_server_has_three_tools
-    assert_equal 3, @server.tools.length
+  def test_server_has_seven_tools
+    assert_equal 7, @server.tools.length
   end
 
   def test_server_tool_names
     names = @server.tools.keys.sort
-    assert_equal %w[create-post get-platforms list-queue], names
+    expected = %w[create-post delete-post get-platforms get-post list-history list-queue publish-now]
+    assert_equal expected, names
+  end
+
+  def test_server_has_two_resources
+    assert_equal 2, @server.resources.length
+  end
+
+  def test_server_resource_uris
+    uris = @server.resources.map(&:uri).sort
+    assert_equal %w[blurt://platforms blurt://queue], uris
   end
 
   # --- create-post ---
@@ -41,7 +49,7 @@ class ServerTest < Minitest::Test
         }
       }.to_json, headers: json_headers)
 
-    result = call_tool("create-post", {
+    result = call_tool(@server, "create-post", {
       content: "Hello world!",
       platforms: %w[bluesky mastodon]
     })
@@ -64,7 +72,7 @@ class ServerTest < Minitest::Test
         }
       }.to_json, headers: json_headers)
 
-    result = call_tool("create-post", {
+    result = call_tool(@server, "create-post", {
       content: "Long article",
       platforms: %w[devto],
       title: "My Article",
@@ -79,7 +87,7 @@ class ServerTest < Minitest::Test
     stub_request(:post, "http://localhost:3000/api/posts")
       .to_return(status: 401, body: { error: "Unauthorized" }.to_json, headers: json_headers)
 
-    result = call_tool("create-post", {
+    result = call_tool(@server, "create-post", {
       content: "Hello",
       platforms: %w[bluesky]
     })
@@ -100,7 +108,7 @@ class ServerTest < Minitest::Test
         ]
       }.to_json, headers: json_headers)
 
-    result = call_tool("list-queue", {})
+    result = call_tool(@server, "list-queue", {})
 
     assert_equal false, result["isError"]
     text = result["content"].first["text"]
@@ -114,7 +122,7 @@ class ServerTest < Minitest::Test
       .with(query: { status: "queue" })
       .to_return(status: 200, body: { posts: [] }.to_json, headers: json_headers)
 
-    result = call_tool("list-queue", {})
+    result = call_tool(@server, "list-queue", {})
 
     assert_includes result["content"].first["text"], "No queue posts found."
   end
@@ -124,7 +132,7 @@ class ServerTest < Minitest::Test
       .with(query: { status: "sent", platform: "bluesky" })
       .to_return(status: 200, body: { posts: [] }.to_json, headers: json_headers)
 
-    result = call_tool("list-queue", { status: "sent", platform: "bluesky" })
+    result = call_tool(@server, "list-queue", { status: "sent", platform: "bluesky" })
 
     assert_includes result["content"].first["text"], "No sent posts found."
   end
@@ -134,7 +142,7 @@ class ServerTest < Minitest::Test
       .with(query: { status: "queue" })
       .to_raise(Faraday::ConnectionFailed.new("Connection refused"))
 
-    result = call_tool("list-queue", {})
+    result = call_tool(@server, "list-queue", {})
 
     assert_equal true, result["isError"]
     assert_includes result["content"].first["text"], "Error:"
@@ -152,7 +160,7 @@ class ServerTest < Minitest::Test
         ]
       }.to_json, headers: json_headers)
 
-    result = call_tool("get-platforms", {})
+    result = call_tool(@server, "get-platforms", {})
 
     assert_equal false, result["isError"]
     text = result["content"].first["text"]
@@ -165,7 +173,7 @@ class ServerTest < Minitest::Test
     stub_request(:get, "http://localhost:3000/api/platforms")
       .to_return(status: 200, body: { platforms: [] }.to_json, headers: json_headers)
 
-    result = call_tool("get-platforms", {})
+    result = call_tool(@server, "get-platforms", {})
 
     assert_includes result["content"].first["text"], "No platforms configured."
   end
@@ -174,36 +182,9 @@ class ServerTest < Minitest::Test
     stub_request(:get, "http://localhost:3000/api/platforms")
       .to_return(status: 401, body: { error: "Unauthorized" }.to_json, headers: json_headers)
 
-    result = call_tool("get-platforms", {})
+    result = call_tool(@server, "get-platforms", {})
 
     assert_equal true, result["isError"]
     assert_includes result["content"].first["text"], "Error:"
-  end
-
-  private
-
-  def initialize_server!
-    request = {
-      jsonrpc: "2.0", id: "init", method: "initialize",
-      params: {
-        protocolVersion: "2025-03-26",
-        capabilities: {},
-        clientInfo: { name: "test", version: "1.0" }
-      }
-    }.to_json
-    @server.handle_json(request)
-  end
-
-  def call_tool(name, arguments)
-    request = {
-      jsonrpc: "2.0", id: SecureRandom.uuid, method: "tools/call",
-      params: { name: name, arguments: arguments }
-    }.to_json
-    response = JSON.parse(@server.handle_json(request))
-    response["result"]
-  end
-
-  def json_headers
-    { "Content-Type" => "application/json" }
   end
 end

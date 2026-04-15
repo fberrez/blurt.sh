@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "blurt": {
+      "command": "bundle",
+      "args": ["exec", "mcp/bin/blurt-mcp"],
+      "env": {
+        "BLURT_API_URL": "http://localhost:3000",
+        "BLURT_API_KEY": "${BLURT_API_KEY}"
+      }
+    }
+  }
+}

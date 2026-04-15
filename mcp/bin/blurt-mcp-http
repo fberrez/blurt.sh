@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
+$LOAD_PATH.unshift File.expand_path("../../cli/lib", __dir__)
+
+require "blurt_mcp"
+require "blurt_mcp/http_app"
+
+port = (ENV["PORT"] || ARGV[0] || 3333).to_i
+host = ENV["HOST"] || "0.0.0.0"
+
+config = Blurt::Config.new(
+  api_url: ENV["BLURT_API_URL"],
+  api_key: ENV["BLURT_API_KEY"]
+)
+app = BlurtMcp::HttpApp.new(config: config, stateless: true)
+
+begin
+  require "puma"
+  require "rack/handler/puma"
+  warn "[blurt-mcp-http] Listening on http://#{host}:#{port}#{BlurtMcp::HttpApp::DEFAULT_PATH} (puma)"
+  Rack::Handler::Puma.run(app, Host: host, Port: port)
+rescue LoadError
+  begin
+    require "webrick"
+    require "rack/handler/webrick"
+    warn "[blurt-mcp-http] Listening on http://#{host}:#{port}#{BlurtMcp::HttpApp::DEFAULT_PATH} (webrick)"
+    Rack::Handler::WEBrick.run(app, Host: host, Port: port)
+  rescue LoadError
+    warn "[blurt-mcp-http] Neither puma nor webrick is installed. Install one or run `rackup mcp/config.ru` instead."
+    exit 1
+  end
+end

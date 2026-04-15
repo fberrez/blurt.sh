@@ -14,13 +14,16 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1"
 
-  spec.files = Dir["lib/**/*.rb", "bin/*"]
+  spec.files = Dir["lib/**/*.rb", "bin/*", "config.ru"]
   spec.bindir = "bin"
-  spec.executables = ["blurt-mcp"]
+  spec.executables = ["blurt-mcp", "blurt-mcp-http"]
 
   spec.add_dependency "mcp", "~> 0.11"
+  spec.add_dependency "rack", "~> 3.0"
 
   spec.add_development_dependency "minitest", "~> 5.0"
+  spec.add_development_dependency "puma", "~> 6.0"
+  spec.add_development_dependency "rackup", "~> 2.1"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "webmock", "~> 3.0"
 end
